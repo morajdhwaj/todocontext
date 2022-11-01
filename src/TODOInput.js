@@ -1,19 +1,30 @@
 import React, { useState } from "react";
+import { insertToDB } from "./PuochDb";
 import TODOList from "./TODOList";
 
 
 const TODOInput = () => {
 
     const[inputList, setInputList]= useState(""); 
+
+    const [inputsTasks, setInputTasks] = useState([])
+
+
     
     const itemEvent = (e) =>{
         setInputList(e.target.value)
     }
 
-    const handleSubmit = () =>{
-
+    const handleSubmit = (e) =>{
+      e.preventDefault();
+      setInputTasks((prev)=>[inputList,...prev]);
+      const  prev ={task:inputList}
+      setInputList (insertToDB(prev))
+      setInputList("");
+      
     }  
-  
+
+   
     return (
     <div>
       <div>
@@ -33,7 +44,8 @@ const TODOInput = () => {
           <button type="submit">Add</button>
         </form>
       </div>
-      <TODOList/>
+      <TODOList  input={inputsTasks}  />
+     
     </div>
   );
 };
